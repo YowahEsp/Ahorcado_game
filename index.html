@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego del Ahorcado</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700&display=swap');
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Nunito', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Elementos decorativos de fondo */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: float 20s infinite linear;
+      z-index: -1;
+    }
+    
+    @keyframes float {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      100% { transform: translate(-50px, -50px) rotate(360deg); }
+    }
+    
+    /* Nubes decorativas */
+    .cloud {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50px;
+      opacity: 0.7;
+      animation: drift 15s infinite linear;
+    }
+    
+    .cloud::before,
+    .cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50px;
+    }
+    
+    .cloud1 {
+      width: 60px;
+      height: 20px;
+      top: 20%;
+      left: -60px;
+      animation-duration: 20s;
+    }
+    
+    .cloud1::before {
+      width: 30px;
+      height: 30px;
+      top: -15px;
+      left: 10px;
+    }
+    
+    .cloud1::after {
+      width: 40px;
+      height: 25px;
+      top: -10px;
+      right: 10px;
+    }
+    
+    .cloud2 {
+      width: 80px;
+      height: 25px;
+      top: 60%;
+      left: -80px;
+      animation-duration: 25s;
+      animation-delay: -10s;
+    }
+    
+    .cloud2::before {
+      width: 40px;
+      height: 40px;
+      top: -20px;
+      left: 15px;
+    }
+    
+    .cloud2::after {
+      width: 50px;
+      height: 30px;
+      top: -15px;
+      right: 15px;
+    }
+    
+    @keyframes drift {
+      0% { transform: translateX(-100px); }
+      100% { transform: translateX(calc(100vw + 100px)); }
+    }
+    
+    h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 3rem;
+      color: #fff;
+      text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+      margin-bottom: 30px;
+      text-align: center;
+      animation: bounce 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes bounce {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-10px); }
+    }
+    
+    .inputs {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 30px;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.3);
+      min-width: 300px;
+    }
+    
+    .inputs label {
+      font-weight: 600;
+      color: #4a5568;
+      font-size: 1.1rem;
+    }
+    
+    input[type=password], input[type=text] {
+      padding: 12px 15px;
+      font-size: 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background: rgba(255,255,255,0.9);
+      font-family: 'Nunito', sans-serif;
+    }
+    
+    input[type=password]:focus, input[type=text]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-2px);
+    }
+    
+    .container {
+      display: grid;
+      grid-template-columns: 350px 1fr;
+      gap: 40px;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+      max-width: 900px;
+      width: 100%;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+    
+    .dibujo {
+      background: linear-gradient(145deg, #f7fafc, #edf2f7);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    .dibujo::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      border: 3px dashed rgba(102, 126, 234, 0.3);
+      border-radius: 15px;
+      pointer-events: none;
+    }
+    
+    .dibujo svg {
+      filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+    }
+    
+    .dibujo svg path, .dibujo svg circle {
+      visibility: hidden;
+      stroke: #2d3748;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: all 0.5s ease;
+    }
+    
+    .visible {
+      visibility: visible !important;
+      animation: drawLine 0.8s ease-out;
+    }
+    
+    @keyframes drawLine {
+      0% { 
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+        opacity: 0;
+      }
+      100% { 
+        stroke-dasharray: 100;
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+    }
+    
+    #pared {
+      visibility: visible;
+      stroke: #8b5cf6;
+      stroke-width: 4;
+    }
+    
+    #parte3 {
+      fill: #fef3c7;
+      stroke: #2d3748;
+    }
+    
+    .game-area {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .pista-container {
+      background: linear-gradient(135deg, #fef3c7, #fed7aa);
+      padding: 15px 20px;
+      border-radius: 15px;
+      border-left: 5px solid #f59e0b;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+    }
+    
+    .pista-container strong {
+      color: #92400e;
+      font-size: 1.1rem;
+    }
+    
+    #mostrarPista {
+      color: #78350f;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+    
+    .guiones {
+      font-size: 32px;
+      margin: 25px 0;
+      letter-spacing: 10px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    
+    .guiones input {
+      width: 40px;
+      height: 50px;
+      font-size: 28px;
+      text-align: center;
+      border: none;
+      border-bottom: 4px solid #667eea;
+      background: transparent;
+      color: #2d3748;
+      font-weight: bold;
+      font-family: 'Fredoka One', cursive;
+      transition: all 0.3s ease;
+    }
+    
+    .guiones input[value]:not([value=""]) {
+      background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+      border-radius: 8px;
+      border-bottom: 4px solid #10b981;
+      transform: scale(1.1);
+      animation: letterReveal 0.6s ease-out;
+    }
+    
+    @keyframes letterReveal {
+      0% { 
+        transform: scale(0) rotate(180deg);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.3) rotate(0deg);
+        opacity: 0.7;
+      }
+      100% { 
+        transform: scale(1.1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+    
+    .input-area {
+      background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+      padding: 20px;
+      border-radius: 15px;
+      border: 2px solid #a5b4fc;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    
+    .input-area label {
+      font-weight: 600;
+      color: #3730a3;
+      font-size: 1.1rem;
+    }
+    
+    #letra {
+      width: 60px;
+      height: 60px;
+      font-size: 24px;
+      text-align: center;
+      border: 3px solid #667eea;
+      border-radius: 12px;
+      background: white;
+      font-weight: bold;
+      font-family: 'Fredoka One', cursive;
+      color: #2d3748;
+      transition: all 0.3s ease;
+    }
+    
+    #letra:focus {
+      outline: none;
+      border-color: #4c51bf;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+      transform: scale(1.1);
+    }
+    
+    .descartadas {
+      background: linear-gradient(135deg, #fee2e2, #fecaca);
+      padding: 15px 20px;
+      border-radius: 15px;
+      border-left: 5px solid #ef4444;
+      margin-top: 15px;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+    }
+    
+    .descartadas {
+      font-weight: 600;
+      color: #991b1b;
+      font-size: 1.1rem;
+    }
+    
+    #descartadas {
+      color: #7f1d1d;
+      font-size: 1.2rem;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+    
+    .resultado {
+      margin-top: 25px;
+      font-size: 28px;
+      font-weight: bold;
+      text-align: center;
+      padding: 20px;
+      border-radius: 15px;
+      font-family: 'Fredoka One', cursive;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      animation: resultAnimation 0.8s ease-out;
+    }
+    
+    @keyframes resultAnimation {
+      0% { 
+        transform: scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2);
+        opacity: 0.8;
+      }
+      100% { 
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .reinicio {
+      display: none;
+      margin-top: 20px;
+      text-align: center;
+    }
+    
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Nunito', sans-serif;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:hover::before {
+      left: 100%;
+    }
+    
+    button:active {
+      transform: translateY(-1px);
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 2rem;
+      }
+      
+      .guiones {
+        font-size: 24px;
+        letter-spacing: 5px;
+      }
+      
+      .guiones input {
+        width: 30px;
+        height: 40px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Nubes decorativas -->
+  <div class="cloud cloud1"></div>
+  <div class="cloud cloud2"></div>
+  
+  <h1>🎯 Juego del Ahorcado 🎯</h1>
+
+  <div class="inputs">
+    <label>🔤 PALABRA: <input type="password" id="palabra" maxlength="20"></label>
+    <label>💡 PISTA: <input type="text" id="pista"></label>
+    <button onclick="iniciarJuego()">🚀 Iniciar Juego</button>
+  </div>
+
+  <div class="container">
+    <div class="dibujo">
+      <svg width="200" height="250">
+        <path id="pared" d="M20 230 L20 20" />
+        <path id="parte1" d="M20 20 L100 20" />
+        <path id="parte2" d="M100 20 L100 50" />
+        <circle id="parte3" cx="100" cy="70" r="20" />
+        <path id="parte4" d="M100 90 L100 140" />
+        <path id="parte5" d="M100 100 L70 120" />
+        <path id="parte6" d="M100 100 L130 120" />
+        <path id="parte7" d="M100 140 L70 180" />
+        <path id="parte8" d="M100 140 L130 180" />
+      </svg>
+    </div>
+
+    <div class="game-area">
+      <div class="pista-container">
+        <strong>💡 PISTA:</strong> <span id="mostrarPista"></span>
+      </div>
+      
+      <div class="guiones" id="guiones"></div>
+      
+      <div class="input-area">
+        <label>✏️ Introduce letra:</label>
+        <input type="text" id="letra" maxlength="1" onkeypress="if(event.key === 'Enter') adivinarLetra()">
+        <button onclick="adivinarLetra()">🎯 Probar</button>
+      </div>
+      
+      <div class="descartadas">
+        <strong>❌ LETRAS DESCARTADAS:</strong> <span id="descartadas"></span>
+      </div>
+      
+      <div class="resultado" id="resultado"></div>
+      
+      <div class="reinicio" id="botonReinicio">
+        <button onclick="reiniciarJuego()">🔄 JUGAR OTRA VEZ</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let palabraOriginal = "";
+    let palabraParaJuego = "";
+    let letrasAdivinadas = [];
+    let letrasDescartadas = [];
+    let intentosFallidos = 0;
+    let juegoTerminado = false;
+
+    // Funciones para generar sonidos
+    function reproducirSonidoAcierto() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Sonido de acierto: dos tonos ascendentes
+      const frecuencias = [523.25, 659.25]; // Do y Mi
+      
+      frecuencias.forEach((freq, index) => {
+        const oscilador = audioContext.createOscillator();
+        const ganancia = audioContext.createGain();
+        
+        oscilador.connect(ganancia);
+        ganancia.connect(audioContext.destination);
+        
+        oscilador.type = 'sine';
+        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
+        
+        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
+        ganancia.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01 + index * 0.1);
+        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2 + index * 0.1);
+        
+        oscilador.start(audioContext.currentTime + index * 0.1);
+        oscilador.stop(audioContext.currentTime + 0.2 + index * 0.1);
+      });
+    }
+
+    function reproducirSonidoError() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Sonido de error: tono descendente áspero
+      const oscilador = audioContext.createOscillator();
+      const ganancia = audioContext.createGain();
+      
+      oscilador.connect(ganancia);
+      ganancia.connect(audioContext.destination);
+      
+      oscilador.type = 'sawtooth';
+      oscilador.frequency.setValueAtTime(300, audioContext.currentTime);
+      oscilador.frequency.exponentialRampToValueAtTime(150, audioContext.currentTime + 0.3);
+      
+      ganancia.gain.setValueAtTime(0, audioContext.currentTime);
+      ganancia.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+      ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      
+      oscilador.start(audioContext.currentTime);
+      oscilador.stop(audioContext.currentTime + 0.3);
+    }
+
+    function reproducirSonidoVictoria() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Sonido de victoria: melodía ascendente alegre
+      const melodia = [523.25, 587.33, 659.25, 783.99]; // Do, Re, Mi, Sol
+      
+      melodia.forEach((freq, index) => {
+        const oscilador = audioContext.createOscillator();
+        const ganancia = audioContext.createGain();
+        
+        oscilador.connect(ganancia);
+        ganancia.connect(audioContext.destination);
+        
+        oscilador.type = 'sine';
+        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
+        
+        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
+        ganancia.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.01 + index * 0.15);
+        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3 + index * 0.15);
+        
+        oscilador.start(audioContext.currentTime + index * 0.15);
+        oscilador.stop(audioContext.currentTime + 0.3 + index * 0.15);
+      });
+    }
+
+    function reproducirSonidoDerrota() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Sonido de derrota: acorde menor descendente
+      const acordeDerrota = [261.63, 207.65, 155.56]; // Do, Sol#, Eb
+      
+      acordeDerrota.forEach((freq, index) => {
+        const oscilador = audioContext.createOscillator();
+        const ganancia = audioContext.createGain();
+        
+        oscilador.connect(ganancia);
+        ganancia.connect(audioContext.destination);
+        
+        oscilador.type = 'triangle';
+        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
+        
+        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
+        ganancia.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.0);
+        
+        oscilador.start(audioContext.currentTime);
+        oscilador.stop(audioContext.currentTime + 1.0);
+      });
+    }
+
+    function quitarTildes(texto) {
+      const acentos = {
+        'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
+        'À': 'A', 'È': 'E', 'Ì': 'I', 'Ò': 'O', 'Ù': 'U',
+        'Ä': 'A', 'Ë': 'E', 'Ï': 'I', 'Ö': 'O', 'Ü': 'U',
+        'Â': 'A', 'Ê': 'E', 'Î': 'I', 'Ô': 'O', 'Û': 'U'
+      };
+      
+      return texto.split('').map(letra => acentos[letra] || letra).join('');
+    }
+
+    function iniciarJuego() {
+      palabraOriginal = document.getElementById("palabra").value.toUpperCase().trim();
+      if (!palabraOriginal) {
+        alert("Por favor, introduce una palabra");
+        return;
+      }
+      
+      palabraParaJuego = quitarTildes(palabraOriginal);
+      const pista = document.getElementById("pista").value;
+      
+      document.getElementById("mostrarPista").textContent = pista;
+      letrasAdivinadas = Array(palabraParaJuego.length).fill(false);
+      letrasDescartadas = [];
+      intentosFallidos = 0;
+      juegoTerminado = false;
+      
+      document.getElementById("descartadas").textContent = "";
+      document.getElementById("resultado").textContent = "";
+      document.getElementById("botonReinicio").style.display = "none";
+      
+      actualizarGuiones();
+      ocultarMuñeco();
+    }
+
+    function reiniciarJuego() {
+      document.getElementById("palabra").value = "";
+      document.getElementById("pista").value = "";
+      document.getElementById("mostrarPista").textContent = "";
+      document.getElementById("letra").value = "";
+      document.getElementById("guiones").innerHTML = "";
+      document.getElementById("resultado").textContent = "";
+      document.getElementById("descartadas").textContent = "";
+      document.getElementById("botonReinicio").style.display = "none";
+      ocultarMuñeco();
+    }
+
+    function actualizarGuiones() {
+      const guiones = [];
+      for (let i = 0; i < palabraParaJuego.length; i++) {
+        if (letrasAdivinadas[i]) {
+          guiones.push(`<input maxlength="1" value="${palabraOriginal[i]}" disabled>`);
+        } else {
+          guiones.push(`<input maxlength="1" value="" disabled>`);
+        }
+      }
+      document.getElementById("guiones").innerHTML = guiones.join(" ");
+    }
+
+    function adivinarLetra() {
+      if (juegoTerminado) return;
+
+      const input = document.getElementById("letra");
+      let letra = input.value.toUpperCase().trim();
+      input.value = "";
+      
+      if (!letra || !letra.match(/^[A-ZÑ]$/)) {
+        alert("Por favor, introduce una letra válida (A-Z, Ñ)");
+        return;
+      }
+      
+      let letraParaComparar = quitarTildes(letra);
+      
+      let yaUsada = false;
+      for (let i = 0; i < palabraParaJuego.length; i++) {
+        if (letrasAdivinadas[i] && palabraParaJuego[i] === letraParaComparar) {
+          yaUsada = true;
+          break;
+        }
+      }
+      
+      if (yaUsada || letrasDescartadas.includes(letra)) {
+        alert("Ya probaste esa letra");
+        return;
+      }
+
+      let acierto = false;
+      for (let i = 0; i < palabraParaJuego.length; i++) {
+        if (palabraParaJuego[i] === letraParaComparar) {
+          letrasAdivinadas[i] = true;
+          acierto = true;
+        }
+      }
+
+      if (acierto) {
+        // Reproducir sonido de acierto
+        reproducirSonidoAcierto();
+      } else {
+        letrasDescartadas.push(letra);
+        document.getElementById("descartadas").textContent = letrasDescartadas.join(" ");
+        mostrarParteMuñeco(++intentosFallidos);
+        // Reproducir sonido de error
+        reproducirSonidoError();
+      }
+
+      actualizarGuiones();
+      verificarFin();
+    }
+
+    function mostrarParteMuñeco(n) {
+      const parte = document.getElementById(`parte${n}`);
+      if (parte) parte.classList.add("visible");
+    }
+
+    function ocultarMuñeco() {
+      for (let i = 1; i <= 8; i++) {
+        const parte = document.getElementById(`parte${i}`);
+        if (parte) parte.classList.remove("visible");
+      }
+    }
+
+    function verificarFin() {
+      let todasAdivinadas = true;
+      for (let i = 0; i < letrasAdivinadas.length; i++) {
+        if (!letrasAdivinadas[i]) {
+          todasAdivinadas = false;
+          break;
+        }
+      }
+      
+      if (todasAdivinadas) {
+        document.getElementById("resultado").textContent = "🎉 ¡HAS GANADO! 🎉";
+        document.getElementById("resultado").style.background = "linear-gradient(135deg, #a7f3d0, #6ee7b7)";
+        document.getElementById("resultado").style.color = "#065f46";
+        juegoTerminado = true;
+        document.getElementById("botonReinicio").style.display = "block";
+        // Reproducir sonido de victoria
+        reproducirSonidoVictoria();
+      } else if (intentosFallidos >= 8) {
+        document.getElementById("resultado").textContent = `💀 HAS PERDIDO 💀\nLa palabra era: ${palabraOriginal}`;
+        document.getElementById("resultado").style.background = "linear-gradient(135deg, #fecaca, #f87171)";
+        document.getElementById("resultado").style.color = "#7f1d1d";
+        juegoTerminado = true;
+        document.getElementById("botonReinicio").style.display = "block";
+        // Reproducir sonido de derrota
+        reproducirSonidoDerrota();
+      }
+    }
+  </script>
+</body>
+</html>
