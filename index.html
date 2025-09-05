@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Juego del Ahorcado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Fredoka+One:wght@400&family=Nunito:wght@400;600;700&display=swap');
     
@@ -10,17 +11,22 @@
       box-sizing: border-box;
     }
     
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    
     body {
       font-family: 'Nunito', sans-serif;
-      margin: 0;
-      padding: 20px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-      overflow-x: hidden;
+      padding: 10px;
     }
     
     /* Elementos decorativos de fondo */
@@ -62,7 +68,7 @@
     .cloud1 {
       width: 60px;
       height: 20px;
-      top: 20%;
+      top: 10%;
       left: -60px;
       animation-duration: 20s;
     }
@@ -84,7 +90,7 @@
     .cloud2 {
       width: 80px;
       height: 25px;
-      top: 60%;
+      top: 50%;
       left: -80px;
       animation-duration: 25s;
       animation-delay: -10s;
@@ -111,47 +117,56 @@
     
     h1 {
       font-family: 'Fredoka One', cursive;
-      font-size: 3rem;
+      font-size: 2.2rem;
       color: #fff;
       text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-      margin-bottom: 30px;
+      margin: 5px 0 15px 0;
       text-align: center;
       animation: bounce 2s ease-in-out infinite alternate;
     }
     
     @keyframes bounce {
       0% { transform: translateY(0px); }
-      100% { transform: translateY(-10px); }
+      100% { transform: translateY(-5px); }
+    }
+    
+    .game-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      max-width: 900px;
+      max-height: 100vh;
     }
     
     .inputs {
       background: rgba(255, 255, 255, 0.95);
-      padding: 25px;
-      border-radius: 20px;
+      padding: 15px;
+      border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      margin-bottom: 30px;
+      gap: 10px;
+      margin-bottom: 15px;
       backdrop-filter: blur(10px);
       border: 2px solid rgba(255,255,255,0.3);
-      min-width: 300px;
     }
     
     .inputs label {
       font-weight: 600;
       color: #4a5568;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     
     input[type=password], input[type=text] {
-      padding: 12px 15px;
-      font-size: 16px;
+      padding: 10px 12px;
+      font-size: 14px;
       border: 2px solid #e2e8f0;
-      border-radius: 12px;
+      border-radius: 10px;
       transition: all 0.3s ease;
       background: rgba(255,255,255,0.9);
       font-family: 'Nunito', sans-serif;
+      width: 100%;
     }
     
     input[type=password]:focus, input[type=text]:focus {
@@ -163,42 +178,47 @@
     
     .container {
       display: grid;
-      grid-template-columns: 350px 1fr;
-      gap: 40px;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 20px;
       background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 25px;
+      padding: 20px;
+      border-radius: 20px;
       box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-      max-width: 900px;
-      width: 100%;
+      flex: 1;
+      overflow: hidden;
       backdrop-filter: blur(10px);
       border: 2px solid rgba(255,255,255,0.3);
     }
     
     .dibujo {
       background: linear-gradient(145deg, #f7fafc, #edf2f7);
-      border-radius: 20px;
-      padding: 20px;
+      border-radius: 15px;
+      padding: 15px;
       box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
+      max-height: 250px;
     }
     
     .dibujo::before {
       content: '';
       position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
       border: 3px dashed rgba(102, 126, 234, 0.3);
-      border-radius: 15px;
+      border-radius: 12px;
       pointer-events: none;
     }
     
     .dibujo svg {
+      width: 100%;
+      height: 100%;
+      max-width: 200px;
       filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
     }
     
@@ -244,42 +264,43 @@
     .game-area {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 15px;
+      overflow: auto;
     }
     
     .pista-container {
       background: linear-gradient(135deg, #fef3c7, #fed7aa);
-      padding: 15px 20px;
-      border-radius: 15px;
+      padding: 12px 15px;
+      border-radius: 12px;
       border-left: 5px solid #f59e0b;
       box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
     }
     
     .pista-container strong {
       color: #92400e;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     
     #mostrarPista {
       color: #78350f;
       font-weight: 600;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     
     .guiones {
-      font-size: 32px;
-      margin: 25px 0;
-      letter-spacing: 10px;
+      font-size: 24px;
+      margin: 15px 0;
+      letter-spacing: 8px;
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
     }
     
     .guiones input {
-      width: 40px;
-      height: 50px;
-      font-size: 28px;
+      width: 35px;
+      height: 45px;
+      font-size: 24px;
       text-align: center;
       border: none;
       border-bottom: 4px solid #667eea;
@@ -315,28 +336,28 @@
     
     .input-area {
       background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-      padding: 20px;
-      border-radius: 15px;
+      padding: 15px;
+      border-radius: 12px;
       border: 2px solid #a5b4fc;
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
       flex-wrap: wrap;
     }
     
     .input-area label {
       font-weight: 600;
       color: #3730a3;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     
     #letra {
-      width: 60px;
-      height: 60px;
-      font-size: 24px;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
       text-align: center;
       border: 3px solid #667eea;
-      border-radius: 12px;
+      border-radius: 10px;
       background: white;
       font-weight: bold;
       font-family: 'Fredoka One', cursive;
@@ -353,33 +374,33 @@
     
     .descartadas {
       background: linear-gradient(135deg, #fee2e2, #fecaca);
-      padding: 15px 20px;
-      border-radius: 15px;
+      padding: 12px 15px;
+      border-radius: 12px;
       border-left: 5px solid #ef4444;
-      margin-top: 15px;
+      margin-top: 10px;
       box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
     }
     
     .descartadas {
       font-weight: 600;
       color: #991b1b;
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
     
     #descartadas {
       color: #7f1d1d;
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
-      letter-spacing: 3px;
+      letter-spacing: 2px;
     }
     
     .resultado {
-      margin-top: 25px;
-      font-size: 28px;
+      margin-top: 15px;
+      font-size: 22px;
       font-weight: bold;
       text-align: center;
-      padding: 20px;
-      border-radius: 15px;
+      padding: 15px;
+      border-radius: 12px;
       font-family: 'Fredoka One', cursive;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
       animation: resultAnimation 0.8s ease-out;
@@ -402,18 +423,18 @@
     
     .reinicio {
       display: none;
-      margin-top: 20px;
+      margin-top: 15px;
       text-align: center;
     }
     
     button {
-      padding: 12px 24px;
-      font-size: 16px;
+      padding: 10px 20px;
+      font-size: 14px;
       font-weight: 600;
       border: none;
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s ease;
       font-family: 'Nunito', sans-serif;
@@ -447,20 +468,57 @@
     }
     
     /* Responsive */
-    @media (max-width: 768px) {
+    @media (min-width: 768px) {
       .container {
-        grid-template-columns: 1fr;
-        gap: 20px;
-        padding: 20px;
+        grid-template-columns: 300px 1fr;
+        grid-template-rows: 1fr;
       }
       
       h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+      }
+      
+      .inputs {
+        padding: 20px;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+    }
+    
+    @media (min-width: 992px) {
+      h1 {
+        font-size: 3rem;
+      }
+      
+      .container {
+        grid-template-columns: 350px 1fr;
+      }
+    }
+    
+    @media (max-height: 700px) {
+      h1 {
+        font-size: 1.8rem;
+        margin: 2px 0 10px 0;
+      }
+      
+      .inputs {
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+      
+      .container {
+        padding: 15px;
+        gap: 15px;
+      }
+      
+      .dibujo {
+        max-height: 200px;
       }
       
       .guiones {
-        font-size: 24px;
-        letter-spacing: 5px;
+        margin: 10px 0;
+        font-size: 20px;
       }
       
       .guiones input {
@@ -476,50 +534,52 @@
   <div class="cloud cloud1"></div>
   <div class="cloud cloud2"></div>
   
-  <h1>🎯 Juego del Ahorcado 🎯</h1>
+  <div class="game-wrapper">
+    <h1>🎯 Juego del Ahorcado 🎯</h1>
 
-  <div class="inputs">
-    <label>🔤 PALABRA: <input type="password" id="palabra" maxlength="20"></label>
-    <label>💡 PISTA: <input type="text" id="pista"></label>
-    <button onclick="iniciarJuego()">🚀 Iniciar Juego</button>
-  </div>
-
-  <div class="container">
-    <div class="dibujo">
-      <svg width="200" height="250">
-        <path id="pared" d="M20 230 L20 20" />
-        <path id="parte1" d="M20 20 L100 20" />
-        <path id="parte2" d="M100 20 L100 50" />
-        <circle id="parte3" cx="100" cy="70" r="20" />
-        <path id="parte4" d="M100 90 L100 140" />
-        <path id="parte5" d="M100 100 L70 120" />
-        <path id="parte6" d="M100 100 L130 120" />
-        <path id="parte7" d="M100 140 L70 180" />
-        <path id="parte8" d="M100 140 L130 180" />
-      </svg>
+    <div class="inputs">
+      <label>🔤 PALABRA: <input type="password" id="palabra" maxlength="20"></label>
+      <label>💡 PISTA: <input type="text" id="pista"></label>
+      <button onclick="iniciarJuego()">🚀 Iniciar Juego</button>
     </div>
 
-    <div class="game-area">
-      <div class="pista-container">
-        <strong>💡 PISTA:</strong> <span id="mostrarPista"></span>
+    <div class="container">
+      <div class="dibujo">
+        <svg viewBox="0 0 200 250">
+          <path id="pared" d="M20 230 L20 20" />
+          <path id="parte1" d="M20 20 L100 20" />
+          <path id="parte2" d="M100 20 L100 50" />
+          <circle id="parte3" cx="100" cy="70" r="20" />
+          <path id="parte4" d="M100 90 L100 140" />
+          <path id="parte5" d="M100 100 L70 120" />
+          <path id="parte6" d="M100 100 L130 120" />
+          <path id="parte7" d="M100 140 L70 180" />
+          <path id="parte8" d="M100 140 L130 180" />
+        </svg>
       </div>
-      
-      <div class="guiones" id="guiones"></div>
-      
-      <div class="input-area">
-        <label>✏️ Introduce letra:</label>
-        <input type="text" id="letra" maxlength="1" onkeypress="if(event.key === 'Enter') adivinarLetra()">
-        <button onclick="adivinarLetra()">🎯 Probar</button>
-      </div>
-      
-      <div class="descartadas">
-        <strong>❌ LETRAS DESCARTADAS:</strong> <span id="descartadas"></span>
-      </div>
-      
-      <div class="resultado" id="resultado"></div>
-      
-      <div class="reinicio" id="botonReinicio">
-        <button onclick="reiniciarJuego()">🔄 JUGAR OTRA VEZ</button>
+
+      <div class="game-area">
+        <div class="pista-container">
+          <strong>💡 PISTA:</strong> <span id="mostrarPista"></span>
+        </div>
+        
+        <div class="guiones" id="guiones"></div>
+        
+        <div class="input-area">
+          <label>✏️ Introduce letra:</label>
+          <input type="text" id="letra" maxlength="1" onkeypress="if(event.key === 'Enter') adivinarLetra()">
+          <button onclick="adivinarLetra()">🎯 Probar</button>
+        </div>
+        
+        <div class="descartadas">
+          <strong>❌ LETRAS DESCARTADAS:</strong> <span id="descartadas"></span>
+        </div>
+        
+        <div class="resultado" id="resultado"></div>
+        
+        <div class="reinicio" id="botonReinicio">
+          <button onclick="reiniciarJuego()">🔄 JUGAR OTRA VEZ</button>
+        </div>
       </div>
     </div>
   </div>
