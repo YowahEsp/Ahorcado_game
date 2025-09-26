@@ -9,27 +9,27 @@
     
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     
     html, body {
       width: 100%;
       height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
+      overflow: hidden; /* ¡Clave! Prohíbe las barras de scroll en toda la página */
+      font-family: 'Nunito', sans-serif;
     }
     
     body {
-      font-family: 'Nunito', sans-serif;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      justify-content: center; /* Centra el wrapper horizontalmente */
+      align-items: center;    /* Centra el wrapper verticalmente */
+      padding: 1vh 1vw; /* Usa padding relativo a la pantalla */
       position: relative;
-      padding: 10px;
     }
-    
-    /* Elementos decorativos de fondo */
+
+    /* --- ESTILOS DECORATIVOS (SIN CAMBIOS IMPORTANTES) --- */
     body::before {
       content: '';
       position: fixed;
@@ -42,87 +42,38 @@
       animation: float 20s infinite linear;
       z-index: -1;
     }
-    
     @keyframes float {
       0% { transform: translate(0, 0) rotate(0deg); }
       100% { transform: translate(-50px, -50px) rotate(360deg); }
     }
-    
-    /* Nubes decorativas */
     .cloud {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 50px;
-      opacity: 0.7;
-      animation: drift 15s infinite linear;
+      position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50px; opacity: 0.7; animation: drift 15s infinite linear;
     }
-    
-    .cloud::before,
-    .cloud::after {
-      content: '';
-      position: absolute;
-      background: rgba(255, 255, 255, 0.8);
-      border-radius: 50px;
+    .cloud::before, .cloud::after {
+      content: ''; position: absolute; background: rgba(255, 255, 255, 0.8); border-radius: 50px;
     }
-    
-    .cloud1 {
-      width: 60px;
-      height: 20px;
-      top: 10%;
-      left: -60px;
-      animation-duration: 20s;
-    }
-    
-    .cloud1::before {
-      width: 30px;
-      height: 30px;
-      top: -15px;
-      left: 10px;
-    }
-    
-    .cloud1::after {
-      width: 40px;
-      height: 25px;
-      top: -10px;
-      right: 10px;
-    }
-    
-    .cloud2 {
-      width: 80px;
-      height: 25px;
-      top: 50%;
-      left: -80px;
-      animation-duration: 25s;
-      animation-delay: -10s;
-    }
-    
-    .cloud2::before {
-      width: 40px;
-      height: 40px;
-      top: -20px;
-      left: 15px;
-    }
-    
-    .cloud2::after {
-      width: 50px;
-      height: 30px;
-      top: -15px;
-      right: 15px;
-    }
-    
+    .cloud1 { width: 60px; height: 20px; top: 10%; left: -60px; animation-duration: 20s; }
+    .cloud1::before { width: 30px; height: 30px; top: -15px; left: 10px; }
+    .cloud1::after { width: 40px; height: 25px; top: -10px; right: 10px; }
+    .cloud2 { width: 80px; height: 25px; top: 50%; left: -80px; animation-duration: 25s; animation-delay: -10s; }
+    .cloud2::before { width: 40px; height: 40px; top: -20px; left: 15px; }
+    .cloud2::after { width: 50px; height: 30px; top: -15px; right: 15px; }
     @keyframes drift {
       0% { transform: translateX(-100px); }
       100% { transform: translateX(calc(100vw + 100px)); }
     }
+    /* --- FIN DE ESTILOS DECORATIVOS --- */
     
     h1 {
       font-family: 'Fredoka One', cursive;
-      font-size: 2.2rem;
+      /* ¡Clave! Fuente que se adapta al alto de la pantalla, con un mínimo y máximo */
+      font-size: clamp(1.5rem, 5vh, 2.5rem); 
       color: #fff;
       text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
-      margin: 5px 0 15px 0;
       text-align: center;
       animation: bounce 2s ease-in-out infinite alternate;
+      flex-shrink: 0; /* No encoger el título */
+      margin-bottom: 1.5vh;
     }
     
     @keyframes bounce {
@@ -136,35 +87,34 @@
       width: 100%;
       height: 100%;
       max-width: 900px;
-      max-height: 100vh;
     }
     
     .inputs {
       background: rgba(255, 255, 255, 0.95);
-      padding: 15px;
+      padding: clamp(10px, 2vh, 20px);
       border-radius: 15px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-bottom: 15px;
+      gap: 1.5vh;
       backdrop-filter: blur(10px);
       border: 2px solid rgba(255,255,255,0.3);
+      flex-shrink: 0; /* No encoger este panel */
+      margin-bottom: 1.5vh;
     }
     
     .inputs label {
       font-weight: 600;
       color: #4a5568;
-      font-size: 1rem;
+      font-size: clamp(0.8rem, 2.5vmin, 1rem);
     }
     
     input[type=password], input[type=text] {
-      padding: 10px 12px;
-      font-size: 14px;
+      padding: 1.5vh 12px;
+      font-size: clamp(12px, 2.5vmin, 14px);
       border: 2px solid #e2e8f0;
       border-radius: 10px;
       transition: all 0.3s ease;
-      background: rgba(255,255,255,0.9);
       font-family: 'Nunito', sans-serif;
       width: 100%;
     }
@@ -177,130 +127,96 @@
     }
     
     .container {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto 1fr;
-      gap: 20px;
+      /* ¡Clave! Este contenedor ocupará todo el espacio vertical sobrante */
+      flex: 1; 
+      display: flex;
+      flex-direction: column; /* Diseño móvil primero (vertical) */
+      gap: 2vh;
       background: rgba(255, 255, 255, 0.95);
-      padding: 20px;
+      padding: clamp(10px, 2vmin, 20px);
       border-radius: 20px;
       box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-      flex: 1;
-      overflow: hidden;
       backdrop-filter: blur(10px);
       border: 2px solid rgba(255,255,255,0.3);
+      overflow: hidden; /* ¡Clave! Evita que el contenido interno se desborde */
     }
     
     .dibujo {
       background: linear-gradient(145deg, #f7fafc, #edf2f7);
       border-radius: 15px;
-      padding: 15px;
+      padding: 10px;
       box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
-      max-height: 250px;
+      /* ¡Clave! Proporción flexible. Ocupará 1 parte del espacio disponible */
+      flex: 1.2;
+      overflow: hidden;
     }
-    
-    .dibujo::before {
-      content: '';
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      right: 8px;
-      bottom: 8px;
-      border: 3px dashed rgba(102, 126, 234, 0.3);
-      border-radius: 12px;
-      pointer-events: none;
-    }
-    
+
     .dibujo svg {
       width: 100%;
       height: 100%;
-      max-width: 200px;
+      object-fit: contain; /* ¡Clave! El SVG se ajusta sin deformarse */
       filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
     }
-    
+
     .dibujo svg path, .dibujo svg circle {
-      visibility: hidden;
-      stroke: #2d3748;
-      stroke-width: 3;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      transition: all 0.5s ease;
+      visibility: hidden; stroke: #2d3748; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; transition: all 0.5s ease;
     }
-    
-    .visible {
-      visibility: visible !important;
-      animation: drawLine 0.8s ease-out;
-    }
-    
-    @keyframes drawLine {
-      0% { 
-        stroke-dasharray: 100;
-        stroke-dashoffset: 100;
-        opacity: 0;
-      }
-      100% { 
-        stroke-dasharray: 100;
-        stroke-dashoffset: 0;
-        opacity: 1;
-      }
-    }
-    
-    #pared {
-      visibility: visible;
-      stroke: #8b5cf6;
-      stroke-width: 4;
-    }
-    
-    #parte3 {
-      fill: #fef3c7;
-      stroke: #2d3748;
-    }
+    .visible { visibility: visible !important; animation: drawLine 0.8s ease-out; }
+    @keyframes drawLine { 0% { stroke-dasharray: 100; stroke-dashoffset: 100; opacity: 0; } 100% { stroke-dasharray: 100; stroke-dashoffset: 0; opacity: 1; } }
+    #pared { visibility: visible; stroke: #8b5cf6; stroke-width: 4; }
+    #parte3 { fill: #fef3c7; stroke: #2d3748; }
     
     .game-area {
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      overflow: auto;
+      gap: 1.5vh;
+      /* ¡Clave! Ocupará 2 partes del espacio, el doble que el dibujo */
+      flex: 2;
+      overflow: hidden; /* ¡Clave! No permite scroll interno */
     }
     
-    .pista-container {
-      background: linear-gradient(135deg, #fef3c7, #fed7aa);
-      padding: 12px 15px;
-      border-radius: 12px;
-      border-left: 5px solid #f59e0b;
-      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+    /* --- NUEVO ESTILO PARA NOTIFICACIONES --- */
+    .notificacion {
+        padding: clamp(8px, 1.5vh, 12px);
+        border-radius: 10px;
+        font-weight: 600;
+        text-align: center;
+        display: none; /* Empieza oculto */
+        color: #991b1b;
+        background-color: #fee2e2;
+        border: 1px solid #fecaca;
+        flex-shrink: 0;
     }
-    
-    .pista-container strong {
-      color: #92400e;
-      font-size: 1rem;
+
+    .pista-container, .input-area, .descartadas, .resultado, .reinicio {
+        flex-shrink: 0; /* ¡Clave! Evita que estos elementos se encojan */
+        padding: clamp(8px, 1.5vh, 15px);
+        border-radius: 12px;
     }
-    
-    #mostrarPista {
-      color: #78350f;
-      font-weight: 600;
-      font-size: 1rem;
-    }
+
+    .pista-container { background: linear-gradient(135deg, #fef3c7, #fed7aa); border-left: 5px solid #f59e0b; }
+    .pista-container strong, #mostrarPista { font-size: clamp(0.8rem, 2.5vmin, 1rem); color: #92400e; }
     
     .guiones {
-      font-size: 24px;
-      margin: 15px 0;
+      /* ¡Clave! Este es el elemento que se estirará para ocupar el espacio central */
+      flex: 1; 
       letter-spacing: 8px;
       display: flex;
       justify-content: center;
+      align-items: center; /* Centra los guiones verticalmente */
       flex-wrap: wrap;
       gap: 6px;
+      overflow: hidden; /* Asegura que no se desborde si la palabra es muy larga */
     }
     
     .guiones input {
-      width: 35px;
-      height: 45px;
-      font-size: 24px;
+      width: clamp(25px, 6vmin, 40px); /* Ancho adaptable */
+      height: clamp(35px, 8vmin, 55px); /* Alto adaptable */
+      font-size: clamp(1rem, 4vmin, 1.8rem); /* Fuente adaptable */
       text-align: center;
       border: none;
       border-bottom: 4px solid #667eea;
@@ -312,225 +228,61 @@
     }
     
     .guiones input[value]:not([value=""]) {
-      background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
-      border-radius: 8px;
-      border-bottom: 4px solid #10b981;
-      transform: scale(1.1);
-      animation: letterReveal 0.6s ease-out;
+      background: linear-gradient(135deg, #a7f3d0, #6ee7b7); border-radius: 8px; border-bottom: 4px solid #10b981; transform: scale(1.1); animation: letterReveal 0.6s ease-out;
     }
+    @keyframes letterReveal { 0% { transform: scale(0) rotate(180deg); opacity: 0; } 50% { transform: scale(1.3) rotate(0deg); opacity: 0.7; } 100% { transform: scale(1.1) rotate(0deg); opacity: 1; } }
     
-    @keyframes letterReveal {
-      0% { 
-        transform: scale(0) rotate(180deg);
-        opacity: 0;
-      }
-      50% {
-        transform: scale(1.3) rotate(0deg);
-        opacity: 0.7;
-      }
-      100% { 
-        transform: scale(1.1) rotate(0deg);
-        opacity: 1;
-      }
-    }
-    
-    .input-area {
-      background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
-      padding: 15px;
-      border-radius: 12px;
-      border: 2px solid #a5b4fc;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    
-    .input-area label {
-      font-weight: 600;
-      color: #3730a3;
-      font-size: 1rem;
-    }
+    .input-area { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); border: 2px solid #a5b4fc; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .input-area label { font-weight: 600; color: #3730a3; font-size: clamp(0.8rem, 2.5vmin, 1rem); }
     
     #letra {
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
-      text-align: center;
-      border: 3px solid #667eea;
-      border-radius: 10px;
-      background: white;
-      font-weight: bold;
-      font-family: 'Fredoka One', cursive;
-      color: #2d3748;
-      transition: all 0.3s ease;
+      width: clamp(40px, 9vmin, 50px); height: clamp(40px, 9vmin, 50px);
+      font-size: clamp(1rem, 4vmin, 1.5rem);
+      text-align: center; border: 3px solid #667eea; border-radius: 10px; background: white; font-weight: bold; font-family: 'Fredoka One', cursive; color: #2d3748; transition: all 0.3s ease;
     }
+    #letra:focus { outline: none; border-color: #4c51bf; box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2); transform: scale(1.1); }
     
-    #letra:focus {
-      outline: none;
-      border-color: #4c51bf;
-      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
-      transform: scale(1.1);
-    }
-    
-    .descartadas {
-      background: linear-gradient(135deg, #fee2e2, #fecaca);
-      padding: 12px 15px;
-      border-radius: 12px;
-      border-left: 5px solid #ef4444;
-      margin-top: 10px;
-      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
-    }
-    
-    .descartadas {
-      font-weight: 600;
-      color: #991b1b;
-      font-size: 1rem;
-    }
-    
-    #descartadas {
-      color: #7f1d1d;
-      font-size: 1.1rem;
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
+    .descartadas { background: linear-gradient(135deg, #fee2e2, #fecaca); border-left: 5px solid #ef4444; }
+    .descartadas { font-weight: 600; color: #991b1b; font-size: clamp(0.8rem, 2.5vmin, 1rem); }
+    #descartadas { color: #7f1d1d; font-size: clamp(0.9rem, 3vmin, 1.1rem); font-weight: bold; letter-spacing: 2px; }
     
     .resultado {
-      margin-top: 15px;
-      font-size: 22px;
-      font-weight: bold;
-      text-align: center;
-      padding: 15px;
-      border-radius: 12px;
-      font-family: 'Fredoka One', cursive;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-      animation: resultAnimation 0.8s ease-out;
+      font-size: clamp(1rem, 3.5vmin, 1.5rem);
+      font-weight: bold; text-align: center; border-radius: 12px; font-family: 'Fredoka One', cursive; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); animation: resultAnimation 0.8s ease-out;
     }
+    @keyframes resultAnimation { 0% { transform: scale(0); opacity: 0; } 50% { transform: scale(1.2); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
     
-    @keyframes resultAnimation {
-      0% { 
-        transform: scale(0);
-        opacity: 0;
-      }
-      50% {
-        transform: scale(1.2);
-        opacity: 0.8;
-      }
-      100% { 
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-    
-    .reinicio {
-      display: none;
-      margin-top: 15px;
-      text-align: center;
-    }
+    .reinicio { display: none; text-align: center; }
     
     button {
-      padding: 10px 20px;
-      font-size: 14px;
-      font-weight: 600;
-      border: none;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-family: 'Nunito', sans-serif;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-      position: relative;
-      overflow: hidden;
+      padding: clamp(8px, 1.5vh, 12px) 20px;
+      font-size: clamp(12px, 2.5vmin, 16px);
+      font-weight: 600; border: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-radius: 10px; cursor: pointer; transition: all 0.3s ease; font-family: 'Nunito', sans-serif; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); position: relative; overflow: hidden;
     }
+    button::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); transition: left 0.6s ease; }
+    button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); }
+    button:hover::before { left: 100%; }
+    button:active { transform: translateY(-1px); }
     
-    button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-      transition: left 0.6s ease;
-    }
-    
-    button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
-    }
-    
-    button:hover::before {
-      left: 100%;
-    }
-    
-    button:active {
-      transform: translateY(-1px);
-    }
-    
-    /* Responsive */
-    @media (min-width: 768px) {
+    /* Responsive para pantallas anchas */
+    @media (min-width: 768px) and (min-height: 500px) {
+      .game-wrapper {
+        max-height: 95vh; /* Limita la altura en pantallas muy altas */
+      }
       .container {
-        grid-template-columns: 300px 1fr;
-        grid-template-rows: 1fr;
+        flex-direction: row; /* ¡Clave! Cambia a diseño horizontal */
+        gap: 20px;
       }
-      
-      h1 {
-        font-size: 2.5rem;
-        margin-bottom: 20px;
-      }
-      
-      .inputs {
-        padding: 20px;
-        gap: 15px;
-        margin-bottom: 20px;
-      }
-    }
-    
-    @media (min-width: 992px) {
-      h1 {
-        font-size: 3rem;
-      }
-      
-      .container {
-        grid-template-columns: 350px 1fr;
-      }
-    }
-    
-    @media (max-height: 700px) {
-      h1 {
-        font-size: 1.8rem;
-        margin: 2px 0 10px 0;
-      }
-      
-      .inputs {
-        padding: 10px;
-        margin-bottom: 10px;
-      }
-      
-      .container {
-        padding: 15px;
-        gap: 15px;
-      }
-      
       .dibujo {
-        max-height: 200px;
+        flex: 1.5; /* Más espacio para el dibujo en horizontal */
       }
-      
-      .guiones {
-        margin: 10px 0;
-        font-size: 20px;
-      }
-      
-      .guiones input {
-        width: 30px;
-        height: 40px;
-        font-size: 20px;
+      .game-area {
+        flex: 2; /* Menos espacio relativo en horizontal */
       }
     }
   </style>
 </head>
 <body>
-  <!-- Nubes decorativas -->
   <div class="cloud cloud1"></div>
   <div class="cloud cloud2"></div>
   
@@ -538,8 +290,8 @@
     <h1>🎯 Juego del Ahorcado 🎯</h1>
 
     <div class="inputs">
-      <label>🔤 PALABRA: <input type="password" id="palabra" maxlength="20"></label>
-      <label>💡 PISTA: <input type="text" id="pista"></label>
+      <label>🔤 PALABRA: <input type="password" id="palabra" maxlength="20" onkeydown="manejarEnter(event, 'pista')"></label>
+      <label>💡 PISTA: <input type="text" id="pista" onkeydown="manejarEnter(event, 'iniciar')"></label>
       <button onclick="iniciarJuego()">🚀 Iniciar Juego</button>
     </div>
 
@@ -559,6 +311,8 @@
       </div>
 
       <div class="game-area">
+        <div id="notificacion" class="notificacion"></div>
+
         <div class="pista-container">
           <strong>💡 PISTA:</strong> <span id="mostrarPista"></span>
         </div>
@@ -591,253 +345,246 @@
     let letrasDescartadas = [];
     let intentosFallidos = 0;
     let juegoTerminado = false;
+    let timeoutNotificacion; // Variable para gestionar el temporizador de la notificación
 
-    // Funciones para generar sonidos
-    function reproducirSonidoAcierto() {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // Sonido de acierto: dos tonos ascendentes
-      const frecuencias = [523.25, 659.25]; // Do y Mi
-      
-      frecuencias.forEach((freq, index) => {
-        const oscilador = audioContext.createOscillator();
-        const ganancia = audioContext.createGain();
-        
-        oscilador.connect(ganancia);
-        ganancia.connect(audioContext.destination);
-        
-        oscilador.type = 'sine';
-        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
-        
-        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
-        ganancia.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01 + index * 0.1);
-        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2 + index * 0.1);
-        
-        oscilador.start(audioContext.currentTime + index * 0.1);
-        oscilador.stop(audioContext.currentTime + 0.2 + index * 0.1);
-      });
+    // --- NUEVA FUNCIÓN: Para gestionar la tecla "Intro" en los inputs iniciales ---
+    function manejarEnter(event, siguienteElementoId) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Evita que se envíe un formulario
+            if (siguienteElementoId === 'iniciar') {
+                iniciarJuego();
+            } else {
+                document.getElementById(siguienteElementoId).focus();
+            }
+        }
+    }
+    
+    // --- NUEVA FUNCIÓN: Para mostrar mensajes en la interfaz en lugar de alerts ---
+    function mostrarNotificacion(mensaje) {
+        const notificacion = document.getElementById("notificacion");
+        notificacion.textContent = mensaje;
+        notificacion.style.display = "block";
+
+        clearTimeout(timeoutNotificacion); // Limpia cualquier mensaje anterior
+
+        timeoutNotificacion = setTimeout(() => {
+            notificacion.style.display = "none";
+        }, 3000); // El mensaje desaparece después de 3 segundos
     }
 
-    function reproducirSonidoError() {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // Sonido de error: tono descendente áspero
-      const oscilador = audioContext.createOscillator();
-      const ganancia = audioContext.createGain();
-      
-      oscilador.connect(ganancia);
-      ganancia.connect(audioContext.destination);
-      
-      oscilador.type = 'sawtooth';
-      oscilador.frequency.setValueAtTime(300, audioContext.currentTime);
-      oscilador.frequency.exponentialRampToValueAtTime(150, audioContext.currentTime + 0.3);
-      
-      ganancia.gain.setValueAtTime(0, audioContext.currentTime);
-      ganancia.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
-      ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-      
-      oscilador.start(audioContext.currentTime);
-      oscilador.stop(audioContext.currentTime + 0.3);
-    }
-
-    function reproducirSonidoVictoria() {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // Sonido de victoria: melodía ascendente alegre
-      const melodia = [523.25, 587.33, 659.25, 783.99]; // Do, Re, Mi, Sol
-      
-      melodia.forEach((freq, index) => {
-        const oscilador = audioContext.createOscillator();
-        const ganancia = audioContext.createGain();
-        
-        oscilador.connect(ganancia);
-        ganancia.connect(audioContext.destination);
-        
-        oscilador.type = 'sine';
-        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
-        
-        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
-        ganancia.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.01 + index * 0.15);
-        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3 + index * 0.15);
-        
-        oscilador.start(audioContext.currentTime + index * 0.15);
-        oscilador.stop(audioContext.currentTime + 0.3 + index * 0.15);
-      });
-    }
-
-    function reproducirSonidoDerrota() {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      
-      // Sonido de derrota: acorde menor descendente
-      const acordeDerrota = [261.63, 207.65, 155.56]; // Do, Sol#, Eb
-      
-      acordeDerrota.forEach((freq, index) => {
-        const oscilador = audioContext.createOscillator();
-        const ganancia = audioContext.createGain();
-        
-        oscilador.connect(ganancia);
-        ganancia.connect(audioContext.destination);
-        
-        oscilador.type = 'triangle';
-        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
-        
-        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
-        ganancia.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
-        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.0);
-        
-        oscilador.start(audioContext.currentTime);
-        oscilador.stop(audioContext.currentTime + 1.0);
-      });
-    }
+    // Funciones de sonido (sin cambios)
+    function reproducirSonidoAcierto() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const frecuencias = [523.25, 659.25];
+      frecuencias.forEach((freq, index) => {
+        const oscilador = audioContext.createOscillator();
+        const ganancia = audioContext.createGain();
+        oscilador.connect(ganancia);
+        ganancia.connect(audioContext.destination);
+        oscilador.type = 'sine';
+        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
+        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
+        ganancia.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01 + index * 0.1);
+        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2 + index * 0.1);
+        oscilador.start(audioContext.currentTime + index * 0.1);
+        oscilador.stop(audioContext.currentTime + 0.2 + index * 0.1);
+      });
+    }
+    function reproducirSonidoError() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscilador = audioContext.createOscillator();
+      const ganancia = audioContext.createGain();
+      oscilador.connect(ganancia);
+      ganancia.connect(audioContext.destination);
+      oscilador.type = 'sawtooth';
+      oscilador.frequency.setValueAtTime(300, audioContext.currentTime);
+      oscilador.frequency.exponentialRampToValueAtTime(150, audioContext.currentTime + 0.3);
+      ganancia.gain.setValueAtTime(0, audioContext.currentTime);
+      ganancia.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.01);
+      ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      oscilador.start(audioContext.currentTime);
+      oscilador.stop(audioContext.currentTime + 0.3);
+    }
+    function reproducirSonidoVictoria() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const melodia = [523.25, 587.33, 659.25, 783.99];
+      melodia.forEach((freq, index) => {
+        const oscilador = audioContext.createOscillator();
+        const ganancia = audioContext.createGain();
+        oscilador.connect(ganancia);
+        ganancia.connect(audioContext.destination);
+        oscilador.type = 'sine';
+        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
+        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
+        ganancia.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.01 + index * 0.15);
+        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3 + index * 0.15);
+        oscilador.start(audioContext.currentTime + index * 0.15);
+        oscilador.stop(audioContext.currentTime + 0.3 + index * 0.15);
+      });
+    }
+    function reproducirSonidoDerrota() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const acordeDerrota = [261.63, 207.65, 155.56];
+      acordeDerrota.forEach((freq, index) => {
+        const oscilador = audioContext.createOscillator();
+        const ganancia = audioContext.createGain();
+        oscilador.connect(ganancia);
+        ganancia.connect(audioContext.destination);
+        oscilador.type = 'triangle';
+        oscilador.frequency.setValueAtTime(freq, audioContext.currentTime);
+        ganancia.gain.setValueAtTime(0, audioContext.currentTime);
+        ganancia.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.01);
+        ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.0);
+        oscilador.start(audioContext.currentTime);
+        oscilador.stop(audioContext.currentTime + 1.0);
+      });
+    }
 
     function quitarTildes(texto) {
-      const acentos = {
-        'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U',
-        'À': 'A', 'È': 'E', 'Ì': 'I', 'Ò': 'O', 'Ù': 'U',
-        'Ä': 'A', 'Ë': 'E', 'Ï': 'I', 'Ö': 'O', 'Ü': 'U',
-        'Â': 'A', 'Ê': 'E', 'Î': 'I', 'Ô': 'O', 'Û': 'U'
-      };
-      
-      return texto.split('').map(letra => acentos[letra] || letra).join('');
+        const acentos = {
+            'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U', 'À': 'A', 'È': 'E', 'Ì': 'I', 'Ò': 'O', 'Ù': 'U', 'Ä': 'A', 'Ë': 'E', 'Ï': 'I', 'Ö': 'O', 'Ü': 'U', 'Â': 'A', 'Ê': 'E', 'Î': 'I', 'Ô': 'O', 'Û': 'U'
+        };
+        return texto.split('').map(letra => acentos[letra] || letra).join('');
     }
 
     function iniciarJuego() {
-      palabraOriginal = document.getElementById("palabra").value.toUpperCase().trim();
-      if (!palabraOriginal) {
-        alert("Por favor, introduce una palabra");
-        return;
-      }
-      
-      palabraParaJuego = quitarTildes(palabraOriginal);
-      const pista = document.getElementById("pista").value;
-      
-      document.getElementById("mostrarPista").textContent = pista;
-      letrasAdivinadas = Array(palabraParaJuego.length).fill(false);
-      letrasDescartadas = [];
-      intentosFallidos = 0;
-      juegoTerminado = false;
-      
-      document.getElementById("descartadas").textContent = "";
-      document.getElementById("resultado").textContent = "";
-      document.getElementById("botonReinicio").style.display = "none";
-      
-      actualizarGuiones();
-      ocultarMuñeco();
+        palabraOriginal = document.getElementById("palabra").value.toUpperCase().trim();
+        // --- MEJORA: Usa la nueva función de notificación en lugar de alert ---
+        if (!palabraOriginal) {
+            mostrarNotificacion("Por favor, introduce una palabra para empezar.");
+            return;
+        }
+        
+        palabraParaJuego = quitarTildes(palabraOriginal);
+        const pista = document.getElementById("pista").value;
+        
+        document.getElementById("mostrarPista").textContent = pista;
+        letrasAdivinadas = Array(palabraParaJuego.length).fill(false);
+        letrasDescartadas = [];
+        intentosFallidos = 0;
+        juegoTerminado = false;
+        
+        document.getElementById("descartadas").textContent = "";
+        document.getElementById("resultado").textContent = "";
+        document.getElementById("botonReinicio").style.display = "none";
+        
+        actualizarGuiones();
+        ocultarMuñeco();
+        
+        // --- MEJORA: Pone el foco en el input de la letra al iniciar ---
+        document.getElementById('letra').focus();
     }
 
     function reiniciarJuego() {
-      document.getElementById("palabra").value = "";
-      document.getElementById("pista").value = "";
-      document.getElementById("mostrarPista").textContent = "";
-      document.getElementById("letra").value = "";
-      document.getElementById("guiones").innerHTML = "";
-      document.getElementById("resultado").textContent = "";
-      document.getElementById("descartadas").textContent = "";
-      document.getElementById("botonReinicio").style.display = "none";
-      ocultarMuñeco();
+        document.getElementById("palabra").value = "";
+        document.getElementById("pista").value = "";
+        document.getElementById("mostrarPista").textContent = "";
+        document.getElementById("letra").value = "";
+        document.getElementById("guiones").innerHTML = "";
+        document.getElementById("resultado").textContent = "";
+        document.getElementById("descartadas").textContent = "";
+        document.getElementById("botonReinicio").style.display = "none";
+        ocultarMuñeco();
+        // Al reiniciar, devolvemos el foco al primer campo
+        document.getElementById('palabra').focus();
     }
 
     function actualizarGuiones() {
-      const guiones = [];
-      for (let i = 0; i < palabraParaJuego.length; i++) {
-        if (letrasAdivinadas[i]) {
-          guiones.push(`<input maxlength="1" value="${palabraOriginal[i]}" disabled>`);
-        } else {
-          guiones.push(`<input maxlength="1" value="" disabled>`);
+        const guiones = [];
+        for (let i = 0; i < palabraParaJuego.length; i++) {
+            if (letrasAdivinadas[i]) {
+                guiones.push(`<input maxlength="1" value="${palabraOriginal[i]}" disabled>`);
+            } else {
+                guiones.push(`<input maxlength="1" value="" disabled>`);
+            }
         }
-      }
-      document.getElementById("guiones").innerHTML = guiones.join(" ");
+        document.getElementById("guiones").innerHTML = guiones.join(" ");
     }
 
     function adivinarLetra() {
-      if (juegoTerminado) return;
+        if (juegoTerminado) return;
 
-      const input = document.getElementById("letra");
-      let letra = input.value.toUpperCase().trim();
-      input.value = "";
-      
-      if (!letra || !letra.match(/^[A-ZÑ]$/)) {
-        alert("Por favor, introduce una letra válida (A-Z, Ñ)");
-        return;
-      }
-      
-      let letraParaComparar = quitarTildes(letra);
-      
-      let yaUsada = false;
-      for (let i = 0; i < palabraParaJuego.length; i++) {
-        if (letrasAdivinadas[i] && palabraParaJuego[i] === letraParaComparar) {
-          yaUsada = true;
-          break;
+        const input = document.getElementById("letra");
+        let letra = input.value.toUpperCase().trim();
+        input.value = "";
+        
+        // --- MEJORA: Usa la nueva función de notificación ---
+        if (!letra || !letra.match(/^[A-ZÑ]$/)) {
+            mostrarNotificacion("Por favor, introduce una letra válida (A-Z, Ñ).");
+            return;
         }
-      }
-      
-      if (yaUsada || letrasDescartadas.includes(letra)) {
-        alert("Ya probaste esa letra");
-        return;
-      }
-
-      let acierto = false;
-      for (let i = 0; i < palabraParaJuego.length; i++) {
-        if (palabraParaJuego[i] === letraParaComparar) {
-          letrasAdivinadas[i] = true;
-          acierto = true;
+        
+        let letraParaComparar = quitarTildes(letra);
+        
+        let yaUsada = false;
+        for (let i = 0; i < palabraParaJuego.length; i++) {
+            if (letrasAdivinadas[i] && palabraParaJuego[i] === letraParaComparar) {
+                yaUsada = true;
+                break;
+            }
         }
-      }
+        
+        // --- MEJORA: Usa la nueva función de notificación ---
+        if (yaUsada || letrasDescartadas.includes(letra)) {
+            mostrarNotificacion("Ya has probado esa letra. ¡Intenta con otra!");
+            return;
+        }
 
-      if (acierto) {
-        // Reproducir sonido de acierto
-        reproducirSonidoAcierto();
-      } else {
-        letrasDescartadas.push(letra);
-        document.getElementById("descartadas").textContent = letrasDescartadas.join(" ");
-        mostrarParteMuñeco(++intentosFallidos);
-        // Reproducir sonido de error
-        reproducirSonidoError();
-      }
+        let acierto = false;
+        for (let i = 0; i < palabraParaJuego.length; i++) {
+            if (palabraParaJuego[i] === letraParaComparar) {
+                letrasAdivinadas[i] = true;
+                acierto = true;
+            }
+        }
 
-      actualizarGuiones();
-      verificarFin();
+        if (acierto) {
+            reproducirSonidoAcierto();
+        } else {
+            letrasDescartadas.push(letra);
+            document.getElementById("descartadas").textContent = letrasDescartadas.join(" ");
+            mostrarParteMuñeco(++intentosFallidos);
+            reproducirSonidoError();
+        }
+
+        actualizarGuiones();
+        verificarFin();
     }
 
     function mostrarParteMuñeco(n) {
-      const parte = document.getElementById(`parte${n}`);
-      if (parte) parte.classList.add("visible");
+        const parte = document.getElementById(`parte${n}`);
+        if (parte) parte.classList.add("visible");
     }
 
     function ocultarMuñeco() {
-      for (let i = 1; i <= 8; i++) {
-        const parte = document.getElementById(`parte${i}`);
-        if (parte) parte.classList.remove("visible");
-      }
+        for (let i = 1; i <= 8; i++) {
+            const parte = document.getElementById(`parte${i}`);
+            if (parte) parte.classList.remove("visible");
+        }
     }
 
     function verificarFin() {
-      let todasAdivinadas = true;
-      for (let i = 0; i < letrasAdivinadas.length; i++) {
-        if (!letrasAdivinadas[i]) {
-          todasAdivinadas = false;
-          break;
+        let todasAdivinadas = !letrasAdivinadas.includes(false);
+        
+        if (todasAdivinadas) {
+            document.getElementById("resultado").textContent = "🎉 ¡HAS GANADO! 🎉";
+            document.getElementById("resultado").style.background = "linear-gradient(135deg, #a7f3d0, #6ee7b7)";
+            document.getElementById("resultado").style.color = "#065f46";
+            juegoTerminado = true;
+            document.getElementById("botonReinicio").style.display = "block";
+            reproducirSonidoVictoria();
+        } else if (intentosFallidos >= 8) {
+            document.getElementById("resultado").textContent = `💀 HAS PERDIDO 💀 La palabra era: ${palabraOriginal}`;
+            document.getElementById("resultado").style.background = "linear-gradient(135deg, #fecaca, #f87171)";
+            document.getElementById("resultado").style.color = "#7f1d1d";
+            juegoTerminado = true;
+            document.getElementById("botonReinicio").style.display = "block";
+            reproducirSonidoDerrota();
         }
-      }
-      
-      if (todasAdivinadas) {
-        document.getElementById("resultado").textContent = "🎉 ¡HAS GANADO! 🎉";
-        document.getElementById("resultado").style.background = "linear-gradient(135deg, #a7f3d0, #6ee7b7)";
-        document.getElementById("resultado").style.color = "#065f46";
-        juegoTerminado = true;
-        document.getElementById("botonReinicio").style.display = "block";
-        // Reproducir sonido de victoria
-        reproducirSonidoVictoria();
-      } else if (intentosFallidos >= 8) {
-        document.getElementById("resultado").textContent = `💀 HAS PERDIDO 💀\nLa palabra era: ${palabraOriginal}`;
-        document.getElementById("resultado").style.background = "linear-gradient(135deg, #fecaca, #f87171)";
-        document.getElementById("resultado").style.color = "#7f1d1d";
-        juegoTerminado = true;
-        document.getElementById("botonReinicio").style.display = "block";
-        // Reproducir sonido de derrota
-        reproducirSonidoDerrota();
-      }
     }
+    
+    // Al cargar la página, ponemos el foco en el primer campo
+    document.getElementById('palabra').focus();
   </script>
 </body>
 </html>
